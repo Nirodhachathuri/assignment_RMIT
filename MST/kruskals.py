@@ -24,9 +24,39 @@ def kruskalMST(graph: Graph) -> Graph:
 
     # We know the MST will have the same number of nodes as the original input graph
     mst = type(graph)(graph.rows, graph.cols)
-    mst.addVertices(graph.getVertices())
+    vertices = graph.getVertices()
+    mst.addVertices(vertices)
 
-    # IMPLEMENT ME HERE
+    all_edges = []
+    
+    processed_edges = set()
+
+    for u in vertices:
+        
+        for v in graph.neighbours(u):
+            edge_key = frozenset([u, v])
+            
+            
+            if edge_key in processed_edges:
+                continue
+            
+           
+            w = graph.getWeight(u, v)
+            
+            
+            if w > 0:
+                
+                all_edges.append((w, u, v))
+                processed_edges.add(edge_key)
+
+    all_edges.sort(key=lambda x: x[0])
+
+    parent = {v: v for v in vertices}
+
+    for w, u, v in all_edges:
+        
+        if union(u, v, parent):
+            mst.addEdge(u, v, w)
 
     return mst
 
